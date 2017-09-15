@@ -1,6 +1,6 @@
 desc 'send outstanding stock emails'
 namespace :spree_stock_email do
-  task :send_emails do
+  task :send_emails => :environment do
     Spree::Variant.joins(:stock_emails).where(spree_stock_emails: { sent_at: nil }).uniq.find_each do |v|
       if v.in_stock?
         if defined?(Spree::AssembliesPart) == 'constant' && v.product.assembly?
