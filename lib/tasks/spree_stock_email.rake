@@ -9,7 +9,7 @@ namespace :spree_stock_email do
             Spree::StockEmail.notify(v, 10)
           end
         else
-          count = [10, v.total_on_hand].min
+          count = v.total_on_hand
           Spree::StockEmail.notify(v, count)
         end
       end
