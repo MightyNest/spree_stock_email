@@ -40,13 +40,6 @@ class Spree::StockEmail < ActiveRecord::Base
     sent.size
   end
 
-  def self.summary
-    Spree::StockEmail.all.
-    group_by { |e| e.variant_id }.
-    sort_by { |variant| variant.second.select { |stock_email| stock_email.sent_at.nil? }.size }.
-    reverse
-  end
-
   def self.variant_options_text_short(variant)
     variant.option_values.map { |ov| "#{ov.presentation}" }.to_sentence({:words_connector => ", ", :two_words_connector => ", "})
   end

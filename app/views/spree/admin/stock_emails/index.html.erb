@@ -120,21 +120,15 @@
             <th><%= Spree.t(:sku) %></th>
             <th><%= Spree.t('stock_email.total_requested_quantities') %></th>
             <th><%= Spree.t('stock_email.requested_notifications') %></th>
-            <th><%= Spree.t('stock_email.sent_emails') %></th>
           </tr>
         </thead>
         <tbody>
           <% @summary.each do |row| %>
             <tr>
-              <% variant = row.second.first.variant %>
-              <% stock_emails = row.second %>
-              <td><%= link_to variant_extended_name(variant), edit_admin_product_variant_path(variant.product.slug, variant.id) %> </td>
-              <td><%= variant.sku %></td>
-              <% requested = stock_emails.select { |e| e.sent_at.nil? }.count %>
-              <% sent = stock_emails.count - requested %>
-              <td><%= stock_emails.sum(&:quantity) %></td>
-              <td><%= requested %></td>
-              <td><%= sent %></td>
+              <td><%= link_to row['name'], edit_admin_product_variant_path(row['slug'], row['variant_id']) %> </td>
+              <td><%= row['sku'] %></td>
+              <td><%= row['quantity'] %></td>
+              <td><%= row['requested'] %></td>
             </tr>
           <% end %>
         </tbody>
