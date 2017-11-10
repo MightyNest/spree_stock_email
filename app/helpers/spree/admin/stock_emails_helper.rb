@@ -2,7 +2,12 @@ module Spree
   module Admin
     module StockEmailsHelper
       def variant_extended_name(variant)
-        "#{variant.name} (#{variant_options_text(variant)})"
+        vot = variant_options_text(variant)
+        if vot.blank?
+          variant.name
+        else
+          "#{variant.name} (#{vot})"
+        end
       end
 
       def variant_options_text(variant)

@@ -40,6 +40,7 @@ module Spree
           @collection = super
           @search = @collection.ransack(params[:q])
           @collection = @search.result(distinct: true).
+            includes(variant: :product).
             page(params[:page]).
             per(params[:per_page] || Spree::StockEmailConfig::Config.per_page)
 

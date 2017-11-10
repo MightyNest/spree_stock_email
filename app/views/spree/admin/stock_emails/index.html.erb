@@ -49,8 +49,8 @@
             <%= f.text_field :email_cont, tabindex: 1, class: "form-control js-quick-search-target" %>
           </div>
           <div class="form-group">
-            <%= label_tag :q_variant_id, Spree.t(:variant) %>
-            <%= f.select :variant_id_eq, Spree::Variant.all.collect { |v| [ "#{v.name} (#{v.sku})", v.id ] } , {:include_blank => true}, :class => 'select2 js-filterable' %>
+            <%= label_tag :q_variant_id, Spree.t(:sku) %>
+            <%= f.text_field :variant_sku_eq, class: 'form-control' %>
           </div>
         </div>
       </div>
@@ -79,6 +79,7 @@
     </thead>
     <tbody>
       <% @collection.each do |stock_email| %>
+        <% Rails.logger.debug 'yup' %>
         <tr id="<%= spree_dom_id stock_email %>">
           <td><%= stock_email.email %></td>
           <td><%= stock_email.variant.sku %></td>
@@ -125,7 +126,7 @@
         <tbody>
           <% @summary.each do |row| %>
             <tr>
-              <td><%= link_to row['name'], edit_admin_product_variant_path(row['slug'], row['variant_id']) %> </td>
+              <td><%= link_to row['name'], edit_admin_product_path(row['slug']) %> </td>
               <td><%= row['sku'] %></td>
               <td><%= row['quantity'] %></td>
               <td><%= row['requested'] %></td>
