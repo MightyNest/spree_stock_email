@@ -8,7 +8,13 @@ class Spree::StockEmailsController < ApplicationController
     variant = Spree::Variant.find_by_id(params[:stock_email][:variant] || params[:variant_id])
 
     stock_email = Spree::StockEmail.new
-    stock_email.email = spree_current_user ? spree_current_user.email : params[:stock_email][:email]
+
+    email = params[:stock_email][:email]
+    if email.blank? && spree_current_user
+      email = spree_current_user.email
+    end
+
+    stock_email.email = email
     stock_email.variant = variant
     if params[:stock_email][:quantity].present?
       stock_email.quantity = params[:stock_email][:quantity]
