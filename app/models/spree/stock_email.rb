@@ -15,8 +15,10 @@ class Spree::StockEmail < ActiveRecord::Base
   end
 
   def self.notify(variant, notify_count = nil)
-    notify_count ||= Spree::StockEmailConfig::Config.notify_multiple * variant.total_on_hand
-    return if variant.total_on_hand < Spree::StockEmailConfig::Config.min_notify_threshold
+    available = total_available(variant)
+    return if available < Spree::StockEmailConfig::Config.min_notify_threshold
+
+    notify_count ||= Spree::StockEmailConfig::Config.notify_multiple * available
 
     notify_scope = where(sent_at: nil, variant_id: [variant.id, variant.product.master.id])
     if notify_count < Float::INFINITY
@@ -47,6 +49,14 @@ class Spree::StockEmail < ActiveRecord::Base
   end
 
   private
+
+  def self.total_available(variant)
+    if variant.is_master? && variant.product.has_variants?
+      variant.product.total_on_hand
+    else
+      variant.total_on_hand
+    end
+  end
 
   def unique_variant_email
     errors.add :user, "already registered for notifications on this product" if email_exists?
