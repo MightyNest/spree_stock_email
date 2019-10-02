@@ -17,6 +17,7 @@ class Spree::StockEmail < ActiveRecord::Base
   def self.notify(variant, notify_count = nil)
     available = total_available(variant)
     return if available < Spree::StockEmailConfig::Config.min_notify_threshold
+    return unless variant.product.available?
 
     notify_count ||= Spree::StockEmailConfig::Config.notify_multiple * available
 
