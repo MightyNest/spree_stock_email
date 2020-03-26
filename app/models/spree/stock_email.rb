@@ -49,15 +49,18 @@ class Spree::StockEmail < ActiveRecord::Base
     variant.option_values.map { |ov| "#{ov.presentation}" }.to_sentence({:words_connector => ", ", :two_words_connector => ", "})
   end
 
-  private
-
   def self.total_available(variant)
-    if variant.is_master? && variant.product.has_variants?
-      variant.product.total_on_hand
+    if defined?(Spree::AssembliesPart) && variant.assembly?
+      variant.total_assemblies_available
     else
-      variant.total_on_hand
+      if variant.is_master? && variant.product.has_variants?
+        variant.product.total_on_hand
+      else
+        variant.total_on_hand
+      end
     end
   end
+  private
 
   def unique_variant_email
     errors.add :user, "already registered for notifications on this product" if email_exists?

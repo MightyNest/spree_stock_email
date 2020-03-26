@@ -17,7 +17,8 @@ namespace :spree_stock_email do
           # check if the parts are in stock for this specific variant
           next unless v.can_supply_assembly?
         end
-        Spree::StockEmail.notify(v, 10)
+        count = v.total_assemblies_available
+        Spree::StockEmail.notify(v, count)
       else
         count = v.is_master? ? v.product.total_on_hand : v.total_on_hand
         Spree::StockEmail.notify(v, count)
