@@ -50,7 +50,7 @@ class Spree::StockEmail < ActiveRecord::Base
   end
 
   def self.total_available(variant)
-    if defined?(Spree::AssembliesPart) && variant.assembly?
+    if defined?(Spree::AssembliesPart) && variant.product.assembly?
       variant.total_assemblies_available
     else
       if variant.is_master? && variant.product.has_variants?
